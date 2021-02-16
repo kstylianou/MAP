@@ -28,15 +28,16 @@
         // let lat = JSON.stringify(LatitudeArr);
         // let long = JSON.stringify(LongitudeArr);
         showMap();
-
+        console.log(Latitude + ", " + Longitude)
     }
 
     function showMap(){
         mapboxgl.accessToken = 'pk.eyJ1Ijoia3N0eWxpYW5vdSIsImEiOiJja2w4OWdlY3owZHFqMndydnlqYWdwODhzIn0.5p3nIkXRh8PeBiM-caYVJQ';
         var map = new mapboxgl.Map({
             container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
             center: [Longitude, Latitude],
-            style: 'mapbox://styles/mapbox/streets-v11'
+            zoom: 15
         });
     }
 </script>
