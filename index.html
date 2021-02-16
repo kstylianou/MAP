@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Xs Watersports</title>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
+</head>
+<body>
+<div id='map' style='width: 400px; height: 300px;'></div>
+<script>
+    let Latitude;
+    let Longitude;
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    }
+    else {
+        document.getElementById("error").innerHTML = "Geolocation is not supported by your browser."; //TODO - Geolocation is NOT supported by browser.
+    }
+
+    function showPosition(position)
+    {
+        Latitude = position.coords.latitude;
+        Longitude = position.coords.longitude;
+        // LatitudeArr.push(Latitude);
+        // LongitudeArr.push(Longitude);
+        // let lat = JSON.stringify(LatitudeArr);
+        // let long = JSON.stringify(LongitudeArr);
+        showMap();
+
+    }
+
+    function showMap(){
+        mapboxgl.accessToken = 'pk.eyJ1Ijoia3N0eWxpYW5vdSIsImEiOiJja2w4OWdlY3owZHFqMndydnlqYWdwODhzIn0.5p3nIkXRh8PeBiM-caYVJQ';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            center: [Longitude, Latitude],
+            style: 'mapbox://styles/mapbox/streets-v11'
+        });
+    }
+</script>
+</body>
+</html>
