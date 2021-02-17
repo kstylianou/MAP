@@ -62,7 +62,6 @@
                     navigator.geolocation.getCurrentPosition(show);
                     // retrieve the JSON from the response
                     function show(position) {
-                        var json = JSON.parse(this.response);
                         geojson.features[0].geometry.coordinates.push([position.coords.latitude, position.coords.longitude])
                         console.log(geojson);
                         // update the drone symbol's location on the map
@@ -71,7 +70,7 @@
 
                         // fly the map to the drone's current location
                         map.flyTo({
-                            center: json.geometry.coordinates,
+                            center: geojson.geometry.coordinates,
                             speed: 0.5
                         });
                     }
