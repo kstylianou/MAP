@@ -70,7 +70,7 @@
 
                         // fly the map to the drone's current location
                         map.flyTo({
-                            center: geojson.features[0].geometry.coordinates,
+                            center: geojson.features[0].geometry.coordinates[geojson.features[0].geometry.coordinates.length-1],
                             speed: 0.5
                         });
                     }
