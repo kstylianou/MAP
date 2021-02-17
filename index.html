@@ -59,7 +59,8 @@
         map.on('load', function () {
             window.setInterval(function () {
                 if (navigator.geolocation) {
-                    let cord = navigator.geolocation.getCurrentPosition();
+                    let cord;
+                    navigator.geolocation.getCurrentPosition(cord);
                     // retrieve the JSON from the response
                     var json = JSON.parse(this.response);
                     geojson.features[0].geometry.coordinates.push([cord.coords.latitude, cord.coords.longitude])
