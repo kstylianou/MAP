@@ -29,6 +29,15 @@
         ]
     };
 
+    let urlJson = {
+        "geometry": {
+            "type": "Point",
+            "coordinates": []
+        },
+        "type": "Feature",
+        "properties": {}
+    }
+
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition);
     }
@@ -73,9 +82,10 @@
                     // retrieve the JSON from the response
                     function show(position) {
                         geojson.features[0].geometry.coordinates.push([position.coords.longitude, position.coords.latitude])
-                        console.log(geojson);
+                        urlJson.geometry.coordinates[0].push([position.coords.latitude, position.coords.longitude])
+                        console.log(urlJson);
                         // update the drone symbol's location on the map
-                        map.getSource('drone').setData(geojson);
+                        map.getSource('drone').setData(urlJson);
                         map.getSource('line').setData(geojson)
 
 
@@ -91,7 +101,7 @@
 
 
 
-            map.addSource('drone', { type: 'geojson', data: geojson });
+            map.addSource('drone', { type: 'geojson', data: url });
             map.addLayer({
                 'id': 'drone',
                 'type': 'symbol',
