@@ -70,8 +70,8 @@
 
         window.addEventListener("deviceorientation", handleOrientation, true);
         function handleOrientation(event) {
-            let alpha = event.absolute;
-            map.setBearing(-alpha);
+            let alpha = event.beta;
+            map.setBearing(alpha);
         }
 
 
