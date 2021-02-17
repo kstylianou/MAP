@@ -11,6 +11,22 @@
 <script>
     let Latitude;
     let Longitude;
+    showMap();
+
+
+    // Create a GeoJSON source with an empty lineString.
+    var geojson = {
+        'type': 'FeatureCollection',
+        'features': [
+            {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'LineString',
+                    'coordinates': []
+                }
+            }
+        ]
+    };
 
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition);
@@ -36,10 +52,66 @@
         var map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11',
-            center: [35.015934,34.054960],
-            zoom: 20
+            center: [34.054960,35.015934],
+            zoom: 15
+        });
+
+        map.on('load', function () {
+            window.setInterval(function () {
+                if (navigator.geolocation) {
+                    let cord = navigator.geolocation.getCurrentPosition();
+                    // retrieve the JSON from the response
+                    var json = JSON.parse(this.response);
+                    geojson.features[0].geometry.coordinates.push([cord.coords.latitude, cord.coords.longitude])
+                    console.log(geojson);
+                    // update the drone symbol's location on the map
+                    map.getSource('drone').setData(geojson);
+                    map.getSource('line').setData(geojson)
+
+                    // fly the map to the drone's current location
+                    map.flyTo({
+                        center: json.geometry.coordinates,
+                        speed: 0.5
+                    });
+                }
+            }, 2000);
+
+
+
+            map.addSource('drone', { type: 'geojson', data: geojson });
+            map.addLayer({
+                'id': 'drone',
+                'type': 'symbol',
+                'source': 'drone',
+                'layout': {
+                    'icon-image': 'rocket-15'
+                }
+            });
+
+            map.addSource('line', {
+                'type': 'geojson',
+                'data': geojson
+            });
+
+            // add the line which will be modified in the animation
+            map.addLayer({
+                'id': 'line-animation',
+                'type': 'line',
+                'source': 'line',
+                'layout': {
+                    'line-cap': 'round',
+                    'line-join': 'round'
+                },
+                'paint': {
+                    'line-color': '#ed6498',
+                    'line-width': 5,
+                    'line-opacity': 0.8
+                }
+            });
         });
     }
+
+
 </script>
 </body>
 </html>
