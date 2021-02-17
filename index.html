@@ -13,6 +13,20 @@
     let Longitude;
     showMap();
 
+    window.addEventListener("deviceorientation", handleOrientation, true);
+
+    function handleOrientation(event) {
+        var absolute = event.absolute;
+        alert(absolute)
+        var alpha    = event.alpha;
+        alert(alpha)
+        var beta     = event.beta;
+        alert(beta)
+        var gamma    = event.gamma;
+        alert(gamma);
+
+        // Do stuff with the new orientation data
+    }
 
     // Create a GeoJSON source with an empty lineString.
     var geojson = {
@@ -86,7 +100,7 @@
                 'type': 'symbol',
                 'source': 'drone',
                 'layout': {
-                    'icon-image': 'rocket-15'
+                    'icon-image': 'triangle-12'
                 }
             });
 
