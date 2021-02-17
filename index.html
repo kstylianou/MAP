@@ -56,14 +56,13 @@
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11',
             center: [34.054960,35.015934],
-            zoom: 15
+            zoom: 15,
         });
-
 
         window.addEventListener("deviceorientation", handleOrientation, true);
         function handleOrientation(event) {
             let alpha = event.alpha;
-            map.setPitch(alpha);
+            map.setBearing(alpha);
         }
 
 
