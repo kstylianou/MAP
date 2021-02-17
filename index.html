@@ -13,20 +13,7 @@
     let Longitude;
     showMap();
 
-    window.addEventListener("deviceorientation", handleOrientation, true);
 
-    function handleOrientation(event) {
-        var absolute = event.absolute;
-        alert(absolute)
-        var alpha    = event.alpha;
-        alert(alpha)
-        var beta     = event.beta;
-        alert(beta)
-        var gamma    = event.gamma;
-        alert(gamma);
-
-        // Do stuff with the new orientation data
-    }
 
     // Create a GeoJSON source with an empty lineString.
     var geojson = {
@@ -62,13 +49,24 @@
     }
 
     function showMap(){
+
+
         mapboxgl.accessToken = 'pk.eyJ1Ijoia3N0eWxpYW5vdSIsImEiOiJja2w4OWdlY3owZHFqMndydnlqYWdwODhzIn0.5p3nIkXRh8PeBiM-caYVJQ';
         var map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11',
             center: [34.054960,35.015934],
-            zoom: 15
+            zoom: 15,
+            bearing: -60, // bearing in degrees
         });
+
+
+        window.addEventListener("deviceorientation", handleOrientation, true);
+        function handleOrientation(event) {
+            let alpha = event.alpha;
+            map.setPitch(alpha);
+        }
+
 
         map.on('load', function () {
             window.setInterval(function () {
