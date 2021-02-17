@@ -87,14 +87,14 @@
                         // update the drone symbol's location on the map
                         map.getSource('drone').setData(urlJson);
                         map.getSource('line').setData(geojson);
+                        map.setCenter(position.coords.longitude, position.coords.latitude)
 
-
-                        // fly the map to the drone's current location
-                        map.flyTo({
-                            center: geojson.features[0].geometry.coordinates[geojson.features[0].geometry.coordinates.length-1],
-                            speed: 0.5,
-                            zoom: 15
-                        });
+                        // // fly the map to the drone's current location
+                        // map.flyTo({
+                        //     center: geojson.features[0].geometry.coordinates[geojson.features[0].geometry.coordinates.length-1],
+                        //     speed: 0.5,
+                        //     zoom: 15
+                        // });
                     }
                 }
             }, 2000);
