@@ -82,11 +82,13 @@
                     // retrieve the JSON from the response
                     function show(position) {
                         geojson.features[0].geometry.coordinates.push([position.coords.longitude, position.coords.latitude])
-                        urlJson.geometry.coordinates = [position.coords.latitude, position.coords.longitude];
+                        //urlJson.geometry.coordinates = [position.coords.latitude, position.coords.longitude];
                         console.log(urlJson);
                         // update the drone symbol's location on the map
                         map.getSource('drone').setData(urlJson);
-                        map.getSource('line').setData(geojson)
+                        //map.getSource('line').setData(geojson);
+                        map.getSource('drone').setCoordinates([position.coords.latitude, position.coords.longitude]);
+
 
                         // fly the map to the drone's current location
                         map.flyTo({
@@ -100,7 +102,7 @@
 
 
 
-            map.addSource('drone');
+            map.addSource('drone', { type: 'geojson', data: urlJson });
             map.addLayer({
                 'id': 'drone',
                 'type': 'symbol',
