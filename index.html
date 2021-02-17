@@ -77,7 +77,7 @@
                         // update the drone symbol's location on the map
                         map.getSource('drone').setData(geojson);
                         map.getSource('line').setData(geojson)
-                        map.setCenter([position.coords.longitude, position.coords.latitude]);
+
 
                         // fly the map to the drone's current location
                         map.flyTo({
@@ -97,7 +97,7 @@
                 'type': 'symbol',
                 'source': 'drone',
                 'layout': {
-                    'icon-image': 'triangle-12'
+                    'icon-image': 'triangle-15'
                 }
             });
 
