@@ -59,21 +59,22 @@
         map.on('load', function () {
             window.setInterval(function () {
                 if (navigator.geolocation) {
-                    let cord;
-                    navigator.geolocation.getCurrentPosition(cord);
+                    navigator.geolocation.getCurrentPosition(show);
                     // retrieve the JSON from the response
-                    var json = JSON.parse(this.response);
-                    geojson.features[0].geometry.coordinates.push([cord.coords.latitude, cord.coords.longitude])
-                    console.log(geojson);
-                    // update the drone symbol's location on the map
-                    map.getSource('drone').setData(geojson);
-                    map.getSource('line').setData(geojson)
+                    function show(position) {
+                        var json = JSON.parse(this.response);
+                        geojson.features[0].geometry.coordinates.push([position.coords.latitude, position.coords.longitude])
+                        console.log(geojson);
+                        // update the drone symbol's location on the map
+                        map.getSource('drone').setData(geojson);
+                        map.getSource('line').setData(geojson)
 
-                    // fly the map to the drone's current location
-                    map.flyTo({
-                        center: json.geometry.coordinates,
-                        speed: 0.5
-                    });
+                        // fly the map to the drone's current location
+                        map.flyTo({
+                            center: json.geometry.coordinates,
+                            speed: 0.5
+                        });
+                    }
                 }
             }, 2000);
 
