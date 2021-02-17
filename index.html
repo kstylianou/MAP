@@ -71,8 +71,8 @@
         window.addEventListener("deviceorientation", handleOrientation, true);
         function handleOrientation(event) {
             let alpha = event.alpha;
-            map.setBearing(-alpha);
-            console.log(alpha)
+            map.setBearing(-alpha-360);
+            console.log(alpha - 360)
         }
 
 
