@@ -82,7 +82,7 @@
                     // retrieve the JSON from the response
                     function show(position) {
                         geojson.features[0].geometry.coordinates.push([position.coords.longitude, position.coords.latitude])
-                        urlJson.geometry.coordinates.push([position.coords.latitude, position.coords.longitude])
+                        urlJson.geometry.coordinates = [position.coords.latitude, position.coords.longitude];
                         console.log(urlJson);
                         // update the drone symbol's location on the map
                         map.getSource('drone').setData(urlJson);
