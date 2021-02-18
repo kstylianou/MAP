@@ -36,7 +36,7 @@
         },
         "type": "Feature",
         "properties": {
-            "rotate": '180'
+            "rotation": 180
         }
     }
 
@@ -98,7 +98,8 @@
                 'type': 'symbol',
                 'source': 'drone',
                 'layout': {
-                    'icon-image': 'rocket-15'
+                    'icon-image': 'rocket-15',
+                    'icon-rotate': ['get', 'rotation']
                 }
             });
 
