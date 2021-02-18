@@ -36,7 +36,7 @@
         },
         "type": "Feature",
         "properties": {
-            "rotate": ''
+            "rotate": '180'
         }
     }
 
@@ -83,8 +83,8 @@
                         map.getSource('line').setData(geojson);
                         map.setCenter([position.coords.longitude, position.coords.latitude])
                         window.addEventListener("deviceorientation", (event) => {
-                            urlJson.properties.rotate = event.alpha;
-                            map.getSource('drone').setData(urlJson);
+                            // urlJson.properties.rotate = event.alpha;
+                            // map.getSource('drone').setData(urlJson);
                         }, true);
                     }
                 }
