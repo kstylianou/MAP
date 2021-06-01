@@ -14,11 +14,38 @@
     <input type="submit">
 </form>
 
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.6.3/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
+<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-database.js"></script>
+
+<script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyDuEVO2MeGpEmwLHHepto-VNH60vCGR3Yc",
+        authDomain: "xsmap-b6fb3.firebaseapp.com",
+        projectId: "xsmap-b6fb3",
+        storageBucket: "xsmap-b6fb3.appspot.com",
+        messagingSenderId: "406605448787",
+        appId: "1:406605448787:web:bfef942a543d70d8d268a6"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+
+
+
+
+</script>
+
 <script>
     let Latitude;
     let Longitude;
     let len = 0;
-    showMap();
+    //showMap();
 
 
 
@@ -62,13 +89,12 @@
         // LongitudeArr.push(Longitude);
         // let lat = JSON.stringify(LatitudeArr);
         // let long = JSON.stringify(LongitudeArr);
-        showMap();
+        //showMap();
     }
 
-    function showMap(){
 
 
-        mapboxgl.accessToken = 'pk.eyJ1Ijoia3N0eWxpYW5vdSIsImEiOiJja2w4OWdlY3owZHFqMndydnlqYWdwODhzIn0.5p3nIkXRh8PeBiM-caYVJQ';
+    mapboxgl.accessToken = 'pk.eyJ1Ijoia3N0eWxpYW5vdSIsImEiOiJja2w4OWdlY3owZHFqMndydnlqYWdwODhzIn0.5p3nIkXRh8PeBiM-caYVJQ';
         var map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11',
@@ -80,17 +106,16 @@
             window.setInterval(function () {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(show);
+
                     // retrieve the JSON from the response
                     function show(position) {
-                        geojson.features[0].geometry.coordinates.push([position.coords.longitude, position.coords.latitude])
                         urlJson.geometry.coordinates = [position.coords.longitude, position.coords.latitude];
-
+                        //console.log(urlJson);
+                        // update the drone symbol's location on the map
+                        map.getSource('drone').setData(urlJson);
                         Longitude = position.coords.longitude;
                         Latitude = position.coords.latitude;
 
-                        // update the drone symbol's location on the map
-                        map.getSource('drone').setData(urlJson);
-                        map.getSource('line').setData(geojson);
                         map.setCenter([position.coords.longitude, position.coords.latitude])
                         window.addEventListener("deviceorientation", (event) => {
                             urlJson.properties.rotation = -event.alpha;
@@ -100,9 +125,28 @@
                 }
             }, 2000);
 
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const id = urlParams.get('id')
+
+            var leadsRef = firebase.database().ref('cords').child(id).child('cords');
+            leadsRef.on('value', function(snapshot) {
+                let arr = [];
+                let i = 0;
+                snapshot.forEach(function(childSnapshot) {
+                    arr[i] = childSnapshot.val();
+                    i++;
+                });
 
 
-            map.addSource('drone', { type: 'geojson', data: urlJson });
+                geojson.features[0].geometry.coordinates.push([Longitude, Latitude])
+                map.getSource('line').setData(geojson);
+                geojson.features[0].geometry.coordinates.push([arr[1], arr[0]])
+                map.getSource('line').setData(geojson);
+                console.log([arr[1], arr[0]]);
+            });
+
+            map.addSource('drone', {type: 'geojson', data: urlJson});
             map.addLayer({
                 'id': 'drone',
                 'type': 'symbol',
@@ -134,56 +178,13 @@
                 }
             });
         });
-    }
+
 
 
 </script>
 
 
-<!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/8.6.3/firebase-app.js"></script>
 
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-
-<script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-database.js"></script>
-
-<script>
-    // Your web app's Firebase configuration
-    var firebaseConfig = {
-        apiKey: "AIzaSyDuEVO2MeGpEmwLHHepto-VNH60vCGR3Yc",
-        authDomain: "xsmap-b6fb3.firebaseapp.com",
-        projectId: "xsmap-b6fb3",
-        storageBucket: "xsmap-b6fb3.appspot.com",
-        messagingSenderId: "406605448787",
-        appId: "1:406605448787:web:bfef942a543d70d8d268a6"
-    };
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-
-
-
-    var leadsRef = firebase.database().ref('cords');
-    leadsRef.on('value', function(snapshot) {
-        snapshot.forEach(function(childSnapshot) {
-            var childData = childSnapshot.val();
-            len++;
-            console.log(childData);
-        });
-    });
-
-
-    function saveCords() {
-        let m = document.getElementById('map_name');
-        firebase.database().ref('cords').child(len).set({
-            name: m.value,
-            cords: {
-                lat: Latitude,
-                long: Longitude
-            }
-        })
-    }
-</script>
 
 </body>
 </html>
